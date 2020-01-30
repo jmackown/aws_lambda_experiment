@@ -3,8 +3,6 @@ import datetime
 import logging.config
 import boto3
 import uuid
-from mypy_boto3.dynamodb import DynamoDBServiceResource
-from mypy_boto3.dynamodb.service_resource import Table
 
 
 fleet = [
@@ -52,8 +50,8 @@ def find_unicorn(pickuplocation: dict) -> dict:
 
 
 def record_ride(rideid: str, username: str, unicorn: dict):
-    dynamodb: DynamoDBServiceResource = set_db_connection()
-    table: Table = dynamodb.Table("Rides")
+    dynamodb = set_db_connection()
+    table = dynamodb.Table("Rides")
     table.put_item(
         Item={
             "RideId": rideid,
@@ -65,9 +63,9 @@ def record_ride(rideid: str, username: str, unicorn: dict):
     )
 
 
-def set_db_connection() -> DynamoDBServiceResource:
+def set_db_connection():
 
-    dynamodb: DynamoDBServiceResource = boto3.resource("dynamodb")
+    dynamodb = boto3.resource("dynamodb")
     return dynamodb
 
 
