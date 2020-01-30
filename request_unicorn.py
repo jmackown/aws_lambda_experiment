@@ -1,5 +1,8 @@
 import json
 import datetime
+import logging
+import logging.config
+
 import boto3
 import uuid
 
@@ -10,24 +13,16 @@ fleet = [
     {"Name": "Rocinante", "Color": "Yellow", "Gender": "Female",},
 ]
 
-
-def set_db_connection():
-    dynamodb = boto3.resource("dynamodb")
-
-    return dynamodb
-
-
-def generate_ride_id():
-    rideid = str(uuid.uuid1())
-
-    return rideid
+FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+logging.basicConfig(format=FORMAT, level=logging.ERROR)
+logger = logging.getLogger(__name__)
 
 
 def lambda_handler(event, context):
 
     rideid = generate_ride_id()
 
-    username = ""
+    username = "the_username"
 
     request_body = json.loads(event["body"])
     pickup_location = request_body["PickupLocation"]
@@ -50,7 +45,7 @@ def lambda_handler(event, context):
 
 
 def find_unicorn(pickuplocation: dict):
-    print(
+    logger.info(
         f'Finding unicorn for {pickuplocation["Latitude"]}, '
         f'{pickuplocation["Longitude"]}'
     )
@@ -70,3 +65,17 @@ def record_ride(rideid: str, username: str, unicorn: dict):
             "RequestTime": datetime.datetime.now().isoformat(),
         }
     )
+
+
+def set_db_connection():
+
+    dynamodb = boto3.resource("dynamodb")
+
+    return dynamodb
+
+
+def generate_ride_id():
+
+    rideid = str(uuid.uuid1())
+
+    return rideid

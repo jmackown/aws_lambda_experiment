@@ -1,9 +1,14 @@
+import logging
+import sys
 import uuid
 from unittest import mock
-
 import boto3
-
 import request_unicorn
+
+stream_handler = logging.StreamHandler(sys.stdout)
+logger = logging.getLogger()
+logger.level = logging.INFO
+logger.addHandler(stream_handler)
 
 
 class TestLambda:
@@ -29,7 +34,7 @@ class TestLambda:
             "body": '{"RideId": "df192410-433f-11ea-a0c7-6c40089d22de", '
             '"Unicorn": {"Name": "Bucephalus", "Color": "Golden", '
             '"Gender": "Male"}, "UnicornName": "Bucephalus", '
-            '"Eta": "30 seconds", "Rider": ""}',
+            '"Eta": "30 seconds", "Rider": "the_username"}',
         }
 
     def local_db_connection(self):
