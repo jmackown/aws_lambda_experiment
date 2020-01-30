@@ -2,7 +2,6 @@ import uuid
 from unittest import mock
 
 import boto3
-import pytest
 
 import request_unicorn
 
@@ -22,11 +21,15 @@ class TestLambda:
             "requestContext": {
                 "authorizer": {"claims": {"cognito:username": "the_username"}}
             },
-            "body": '{"PickupLocation":{"Latitude":47.6174755835663,"Longitude":-122.28837066650185}}',
+            "body": '{"PickupLocation":{"Latitude":47.6174755835663,'
+            '"Longitude":-122.28837066650185}}',
         }
         self.request_result = {
             "statusCode": 201,
-            "body": '{"RideId": "df192410-433f-11ea-a0c7-6c40089d22de", "Unicorn": {"Name": "Bucephalus", "Color": "Golden", "Gender": "Male"}, "UnicornName": "Bucephalus", "Eta": "30 seconds", "Rider": ""}',
+            "body": '{"RideId": "df192410-433f-11ea-a0c7-6c40089d22de", '
+            '"Unicorn": {"Name": "Bucephalus", "Color": "Golden", '
+            '"Gender": "Male"}, "UnicornName": "Bucephalus", '
+            '"Eta": "30 seconds", "Rider": ""}',
         }
 
     def local_db_connection(self):

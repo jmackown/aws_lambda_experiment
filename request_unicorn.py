@@ -1,5 +1,4 @@
 import json
-import random
 import datetime
 import boto3
 import uuid
@@ -52,7 +51,8 @@ def lambda_handler(event, context):
 
 def find_unicorn(pickuplocation: dict):
     print(
-        f'Finding unicorn for {pickuplocation["Latitude"]}, {pickuplocation["Longitude"]}'
+        f'Finding unicorn for {pickuplocation["Latitude"]}, '
+        f'{pickuplocation["Longitude"]}'
     )
 
     return fleet[0]
