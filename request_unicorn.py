@@ -12,11 +12,11 @@ fleet = [
 ]
 
 
-
 def set_db_connection():
     dynamodb = boto3.resource("dynamodb")
 
     return dynamodb
+
 
 def generate_ride_id():
     rideid = str(uuid.uuid1())
