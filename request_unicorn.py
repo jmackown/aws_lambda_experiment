@@ -1,10 +1,10 @@
 import json
 import datetime
-import logging
 import logging.config
-
 import boto3
 import uuid
+from mypy_boto3.dynamodb import DynamoDBServiceResource
+from mypy_boto3.dynamodb.service_resource import Table
 
 
 fleet = [
@@ -18,15 +18,13 @@ logging.basicConfig(format=FORMAT, level=logging.ERROR)
 logger = logging.getLogger(__name__)
 
 
-def lambda_handler(event, context):
+def lambda_handler(event: dict) -> dict:
 
-    rideid = generate_ride_id()
-
-    username = "the_username"
-
-    request_body = json.loads(event["body"])
-    pickup_location = request_body["PickupLocation"]
-    unicorn = find_unicorn(pickuplocation=pickup_location)
+    rideid: str = generate_ride_id()
+    username: str = "the_username"
+    request_body: dict = json.loads(event["body"])
+    pickup_location: dict = request_body["PickupLocation"]
+    unicorn: dict = find_unicorn(pickuplocation=pickup_location)
 
     record_ride(rideid=rideid, username=username, unicorn=unicorn)
 
@@ -44,7 +42,7 @@ def lambda_handler(event, context):
     }
 
 
-def find_unicorn(pickuplocation: dict):
+def find_unicorn(pickuplocation: dict) -> dict:
     logger.info(
         f'Finding unicorn for {pickuplocation["Latitude"]}, '
         f'{pickuplocation["Longitude"]}'
@@ -54,8 +52,8 @@ def find_unicorn(pickuplocation: dict):
 
 
 def record_ride(rideid: str, username: str, unicorn: dict):
-    dynamodb = set_db_connection()
-    table = dynamodb.Table("Rides")
+    dynamodb: DynamoDBServiceResource = set_db_connection()
+    table: Table = dynamodb.Table("Rides")
     table.put_item(
         Item={
             "RideId": rideid,
@@ -67,10 +65,9 @@ def record_ride(rideid: str, username: str, unicorn: dict):
     )
 
 
-def set_db_connection():
+def set_db_connection() -> DynamoDBServiceResource:
 
-    dynamodb = boto3.resource("dynamodb")
-
+    dynamodb: DynamoDBServiceResource = boto3.resource("dynamodb")
     return dynamodb
 
 

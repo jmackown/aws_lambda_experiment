@@ -1,6 +1,5 @@
 import logging
 import sys
-import uuid
 from unittest import mock
 import boto3
 import request_unicorn
@@ -42,18 +41,14 @@ class TestLambda:
             "dynamodb", region_name="us-west-2", endpoint_url="http://localhost:8000"
         )
 
+        print(f"type of thing: {type(dynamodb)}")
         return dynamodb
-
-    def random_ride_id(self):
-        rideid = str(uuid.uuid1())
-
-        return rideid
 
     @mock.patch("request_unicorn.set_db_connection")
     @mock.patch("request_unicorn.generate_ride_id")
     def test_lambda_handler(self, mock_generate_ride_id, mock_set_db_connection):
         mock_generate_ride_id.return_value = "df192410-433f-11ea-a0c7-6c40089d22de"
         mock_set_db_connection.get.side_effect = self.local_db_connection()
-        result = request_unicorn.lambda_handler(event=self.request_event, context=None)
+        result = request_unicorn.lambda_handler(event=self.request_event)
 
         assert result == self.request_result
