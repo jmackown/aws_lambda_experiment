@@ -65,12 +65,9 @@ def record_ride(rideid: str, username: str, unicorn: dict):
 
 def set_db_connection():
 
-    dynamodb = boto3.resource("dynamodb")
-    return dynamodb
+    return boto3.resource("dynamodb")
 
 
 def generate_ride_id():
 
-    rideid = str(uuid.uuid1())
-
-    return rideid
+    return str(uuid.uuid1())
